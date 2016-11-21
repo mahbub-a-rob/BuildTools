@@ -1,0 +1,52 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <Import Project="Tasks.props"/>
+
+    <PropertyGroup>
+        <GeneratedGitAttributeFile Condition="'$(GeneratedGitAttributeFile)'==''">
+            $(IntermediateOutputPath)GitAssemblyAttributes$(DefaultLanguageSourceExtension)
+        </GeneratedGitAttributeFile>
+    </PropertyGroup>
+
+    <UsingTask AssemblyFile="$(AspNetBuildTaskAssemblyFile)"
+               TaskName="Microsoft.AspNetCore.Build.Tasks.GetGitCommitInfo"/>
+    <UsingTask AssemblyFile="$(AspNetBuildTaskAssemblyFile)"
+               TaskName="Microsoft.AspNetCore.Build.Tasks.FindGitProjectRoot"/>
+
+    <Target Name="GenerateCommitHashAttribute"
+            BeforeTargets="CoreCompile"
+            DependsOnTargets="PrepareForBuild;CoreGenerateCommitHashAttribute"
+            Condition="'$(DesignTimeBuild)'!='true' AND '$(Configuration)'=='Release'"/>
+
+    <Target Name="_ResolveCommitHash">
+        <FindGitProjectRoot StartDirectory="$(MSBuildProjectDirectory)">
+            <Output TaskParameter="RootDirectory" ItemName="_GitRootDirectory"/>
+        </FindGitProjectRoot>
+
+        <GetGitCommitInfo RepositoryRoot="$(_GitRootDirectory)" WarnOnError="true">
+            <Output TaskParameter="CommitHash" ItemName="_GitCommitHash"/>
+        </GetGitCommitInfo>
+    </Target>
+
+    <Target Name="CoreGenerateCommitHashAttribute"
+            DependsOnTargets="_ResolveGitCommitHash"
+            Inputs="$(_GitCommitHash)"
+            Outputs="$(GeneratedGitAttributeFile)">
+
+        <ItemGroup>
+            <_GitAssemblyMetadataAttribute Include="System.Reflection.AssemblyMetadata">
+                <_Parameter1>CommitHash</_Parameter1>
+                <_Parameter2>$(_GitCommitHash)</_Parameter2>
+            </_GitAssemblyMetadataAttribute>
+
+            <!--Ensure generated file is not already in compile sources-->
+            <Compile Remove="$(GeneratedGitAttributeFile)"/>
+        </ItemGroup>
+
+        <WriteCodeFragment AssemblyAttributes="@(_GitAssemblyMetadataAttribute)"
+                           Language="$(Language)"
+                           OutputFile="$(GeneratedGitAttributeFile)">
+            <Output TaskParameter="OutputFile" ItemName="Compile"/>
+            <Output TaskParameter="OutputFile" ItemName="FileWrites"/>
+        </WriteCodeFragment>
+    </Target>
+</Project>

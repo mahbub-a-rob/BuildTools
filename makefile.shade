@@ -14,7 +14,7 @@ k-standard-goals
 
 #nuget-pack target='package'
   @{
-    var configuration = Environment.GetEnvironmentVariable("Configuration") ?? "Debug";
+    var configuration = E("Configuration") ?? "Debug";
 
     var dependenciesPackagerPath = Path.Combine(BASE_DIR, "src", "DependenciesPackager");
     Exec("dotnet", "publish " + dependenciesPackagerPath + " --no-build " + "--configuration " + configuration);
@@ -25,7 +25,7 @@ k-standard-goals
     var apiCheckPath = Path.Combine(BASE_DIR, "src", "Microsoft.AspNetCore.BuildTools.ApiCheck");
     Exec("dotnet", "publish " + apiCheckPath + " --no-build " + "--configuration " + configuration);
 
-    foreach(var project in new[]{ "NuGetPackageVerifier", "SplitPackages", "DependenciesPackager", "PackageCacheUploader", "Microsoft.AspNetCore.BuildTools.ApiCheck" })
+    foreach(var project in new[]{ "NuGetPackageVerifier", "SplitPackages", "DependenciesPackager", "PackageCacheUploader", "Microsoft.AspNetCore.BuildTools.ApiCheck", "Microsoft.AspNetCore.Build.Tasks" })
     {
       var outputDir = Path.Combine(TARGET_DIR, "build");
       var existingNupkg = Directory.EnumerateFiles(outputDir)
@@ -35,6 +35,7 @@ k-standard-goals
       var version = Path.GetFileNameWithoutExtension(existingNupkg).Substring(project.Length + 1);
       var nuspecPath = Path.Combine("src", project, project + ".nuspec");
       var basePath = Path.Combine(outputDir, project, configuration, "net451", "win7-x64");
+      var otherArgs = "";
 
       if (project == "DependenciesPackager")
       {
@@ -51,6 +52,12 @@ k-standard-goals
           basePath = Path.Combine(apiCheckPath, "bin", configuration);
       }
 
-      Exec(".build/NuGet.exe", "pack -nopack " + nuspecPath + " -version " + version + " -base " + basePath + " -out " + outputDir);
+      if (project == "Microsoft.AspNetCore.Build.Tasks")
+      {
+          basePath = Path.Combine("src", "Microsoft.AspNetCore.Build.Tasks");
+          otherArgs = "-p configuration=" + configuration;
+      }
+
+      ExecClr(".build/NuGet.exe", "pack -nopack " + nuspecPath + " -version " + version + " -base " + basePath + " -out " + outputDir + otherArgs);
     }
   }

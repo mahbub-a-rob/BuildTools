@@ -19,3 +19,4 @@ project.lock.json
 .build
 .vs/
 .vscode/
+.idea/

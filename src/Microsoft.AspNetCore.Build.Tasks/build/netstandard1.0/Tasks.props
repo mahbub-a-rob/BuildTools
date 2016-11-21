@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <AspNetBuildTaskAssemblyFile Condition="'$(MSBuildRuntimeType)' == 'Core'">
+            $(MSBuildThisFileDirectory)\..\..\tools\netstandard1.3\Microsoft.AspNetCore.Build.Tasks.dll
+        </AspNetBuildTaskAssemblyFile>
+        <AspNetBuildTaskAssemblyFile Condition="'$(MSBuildRuntimeType)' != 'Core'">
+            $(MSBuildThisFileDirectory)\..\..\tools\net46\Microsoft.AspNetCore.Build.Tasks.dll
+        </AspNetBuildTaskAssemblyFile>
+    </PropertyGroup>
+</Project>
