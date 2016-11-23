@@ -5,11 +5,7 @@
     "emitEntryPoint": true
   },
   "dependencies": {
-    "NuGet.Commands": {
-      "version": "3.5.0-beta2-1484",
-      "exclude": "compile"
-    },
-    "NuGet.CommandLine.XPlat": "3.5.0-beta2-1484",
+    "NuGet.Packaging": "3.5.0-rc1-final",
     "Microsoft.DotNet.Cli.Utils": "1.0.0-preview2-1-003177",
     "Microsoft.Extensions.CommandLineUtils": "1.0.0",
     "Microsoft.NETCore.App": {

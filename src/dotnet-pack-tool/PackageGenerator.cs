@@ -31,12 +31,17 @@ namespace Microsoft.DotNet.Tools.Compiler
         protected string Configuration { get; }
 
         protected PackageBuilder PackageBuilder { get; private set; }
+        protected IEnumerable<PackageType> PackageTypes { get; private set; }
 
-        public PackageGenerator(Project project, string configuration, ArtifactPathsCalculator artifactPathsCalculator)
+        public PackageGenerator(Project project,
+            string configuration,
+            ArtifactPathsCalculator artifactPathsCalculator,
+            IEnumerable<PackageType> packageTypes)
         {
             ArtifactPathsCalculator = artifactPathsCalculator;
             Project = project;
             Configuration = configuration;
+            PackageTypes = packageTypes;
         }
 
         public bool BuildPackage(IEnumerable<ProjectContext> contexts, List<DiagnosticMessage> packDiagnostics)
@@ -44,6 +49,7 @@ namespace Microsoft.DotNet.Tools.Compiler
             Reporter.Output.WriteLine($"Producing nuget package \"{GetPackageName()}\" for {Project.Name}");
 
             PackageBuilder = CreatePackageBuilder(Project);
+            PackageBuilder.PackageTypes.AddRange(PackageTypes);
 
             // TODO: Report errors for required fields
             // id

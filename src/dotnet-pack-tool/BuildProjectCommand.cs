@@ -54,9 +54,9 @@ namespace Microsoft.DotNet.Tools.Pack
 
                 argsBuilder.Add($"{_project.ProjectFilePath}");
 
-                var result = Command.CreateDotNet("build", argsBuilder);
+                var result = Command.CreateDotNet("build", argsBuilder).Execute();
 
-                return result;
+                return result.ExitCode;
             }
 
             return 0;

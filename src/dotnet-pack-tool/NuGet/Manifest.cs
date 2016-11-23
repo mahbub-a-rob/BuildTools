@@ -123,6 +123,7 @@ namespace NuGet
             metadata.FrameworkAssemblies = copy.FrameworkAssemblies;
             metadata.PackageAssemblyReferences = copy.PackageAssemblyReferences;
             metadata.MinClientVersionString = copy.MinClientVersion?.ToString();
+            metadata.PackageTypes = copy.PackageTypes;
 
             return new Manifest(metadata);
         }

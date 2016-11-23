@@ -7,13 +7,14 @@ using Microsoft.DotNet.ProjectModel;
 using Microsoft.DotNet.ProjectModel.Files;
 using Microsoft.DotNet.Tools.Pack;
 using NuGet;
+using NuGet.Packaging.Core;
 
 namespace Microsoft.DotNet.Tools.Compiler
 {
     public class SymbolPackageGenerator: PackageGenerator
     {
-        public SymbolPackageGenerator(Project project, string configuration, ArtifactPathsCalculator artifactPathsCalculator)
-            : base(project, configuration, artifactPathsCalculator)
+        public SymbolPackageGenerator(Project project, string configuration, ArtifactPathsCalculator artifactPathsCalculator, IEnumerable<PackageType> packageTypes)
+            : base(project, configuration, artifactPathsCalculator, packageTypes)
         {
         }
 

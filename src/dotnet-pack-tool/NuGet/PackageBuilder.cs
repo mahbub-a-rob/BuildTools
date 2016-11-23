@@ -141,6 +141,8 @@ namespace NuGet
             private set;
         }
 
+        public List<PackageType> PackageTypes { get; } = new List<PackageType>();
+
         public List<IPackageFile> Files
         {
             get;

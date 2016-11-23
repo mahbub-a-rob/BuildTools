@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NuGet.Packaging.Core;
 using NuGet.Versioning;
 
 namespace NuGet
@@ -78,6 +79,8 @@ namespace NuGet
         public string Tags { get; set; }
 
         public bool Serviceable { get; set; }
+
+        public IEnumerable<PackageType> PackageTypes { get; set; } = new List<PackageType>();
 
         public IEnumerable<PackageDependencySet> DependencySets { get; set; } = new List<PackageDependencySet>();
 
