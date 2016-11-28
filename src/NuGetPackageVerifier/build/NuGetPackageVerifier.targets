@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="VerifyPackages"
+          AfterTargets="Pack"
+          DependsOnTargets="CoreVerifyPackages">
+    <Warning Text="VerifyPackages target does not support running on non-Windows platforms" Condition="'$(OS)'!='Windows_NT'" />
+  </Target>
+
+  <Target Name="CoreVerifyPackages" Condition="'$(OS)'=='Windows_NT'">
+    <PropertyGroup>
+        <_NuGetVerifierExecutable>$(MSBuildThisFileDirectory)\..\NuGetPackageVerifier.exe</_NuGetVerifierExecutable>
+        <ArtifactsPath Condition="'$(ArtifactsPath)'==''">$(PackageOutputPath)</ArtifactsPath>
+        <NuGetVerifierFile Condition="'$(NuGetVerifierFile)'==''">$(MSBuildProjectDirectory)\NuGetPackageVerifier.json</NuGetVerifierFile>
+    </PropertyGroup>
+
+    <Error Text="Property 'ArtifactsPath' was not set" Condition="'$(ArtifactsPath)'==''" />
+
+    <!-- put space before the ending &quot; for paths that might end in a backslash.-->
+    <Exec Command="&quot;$(_NuGetVerifierExecutable)&quot; &quot;$(ArtifactsPath) &quot; &quot;$(NuGetVerifierFile)&quot;" />
+  </Target>
+</Project>
