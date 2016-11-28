@@ -10,6 +10,7 @@
     </metadata>
     <files>
         <file src="build\**\*" target="build" />
-        <file src="bin\$configuration$\**\*.dll" target="tools" />
+        <file src="bin\$configuration$\netstandard1.3\Microsoft.AspNetCore.Build.Tasks.dll" target="tools\netstandard1.3" />
+        <file src="bin\$configuration$\net46\Microsoft.AspNetCore.Build.Tasks.dll" target="tools\net46" />
     </files>
 </package>

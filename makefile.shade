@@ -54,10 +54,10 @@ k-standard-goals
 
       if (project == "Microsoft.AspNetCore.Build.Tasks")
       {
-          basePath = Path.Combine("src", "Microsoft.AspNetCore.Build.Tasks");
-          otherArgs = "-p configuration=" + configuration;
+          basePath = Path.Combine(Directory.GetCurrentDirectory(), "src", "Microsoft.AspNetCore.Build.Tasks");
+          otherArgs = "-Properties configuration=" + configuration;
       }
 
-      ExecClr(".build/NuGet.exe", "pack -nopack " + nuspecPath + " -version " + version + " -base " + basePath + " -out " + outputDir + otherArgs);
+      ExecClr(".build/NuGet.exe", "pack -nopack " + nuspecPath + " -version " + version + " -base " + basePath + " -out " + outputDir + " " + otherArgs);
     }
   }
