@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 using NuGet.Packaging;
 using NuGetPackageVerifier.Logging;
 
+#if NET451
 namespace NuGetPackageVerifier.Rules
 {
     public class AssemblyStrongNameRule : IPackageVerifierRule
@@ -178,3 +179,4 @@ namespace NuGetPackageVerifier.Rules
         }
     }
 }
+#endif

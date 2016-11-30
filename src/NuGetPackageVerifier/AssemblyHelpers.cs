@@ -4,6 +4,9 @@
 using System;
 using System.IO;
 using System.Reflection;
+#if NETCOREAPP1_1
+using System.Runtime.Loader;
+#endif
 
 namespace NuGetPackageVerifier
 {
@@ -14,7 +17,11 @@ namespace NuGetPackageVerifier
             // From http://msdn.microsoft.com/en-us/library/ms173100.aspx
             try
             {
+#if NETCOREAPP1_1
+                var testAssembly = AssemblyLoadContext.GetAssemblyName(assemblyPath);
+#else
                 var testAssembly = AssemblyName.GetAssemblyName(assemblyPath);
+#endif
                 return true;
             }
             catch (FileNotFoundException)
