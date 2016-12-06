@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.Loader;
 using Mono.Cecil;
 using NuGet.Packaging;
@@ -44,22 +45,23 @@ namespace NuGetPackageVerifier.Rules
                             if (AssemblyHelpers.IsAssemblyManaged(assemblyPath))
                             {
                                 isManagedCode = true;
-                                isStrongNameSigned = true;
-                                var assembly = AssemblyDefinition.ReadAssembly(assemblyPath);
-                                foreach (var module in assembly.Modules)
+                                using (var assembly = AssemblyDefinition.ReadAssembly(assemblyPath))
                                 {
-                                    if (!module.Attributes.HasFlag(ModuleAttributes.StrongNameSigned))
+                                    if (assembly.Modules.Any())
                                     {
-                                        isStrongNameSigned = false;
-                                        break;
+                                        isStrongNameSigned = assembly.Modules.All(
+                                            module => module.Attributes.HasFlag(ModuleAttributes.StrongNameSigned));
                                     }
-                                }
+                                    else
+                                    {
+                                        throw new InvalidOperationException("The managed assembly does not contain any modules.");
+                                    }
 
-                                var testAssembly = AssemblyLoadContext.GetAssemblyName(assemblyPath);
-                                var tokenHexString = BitConverter.ToString(testAssembly.GetPublicKeyToken()).Replace("-", "");
-                                if (_publicKeyToken.Equals(tokenHexString, StringComparison.OrdinalIgnoreCase))
-                                {
-                                    hasCorrectPublicKeyToken = true;
+                                    var tokenHexString = BitConverter.ToString(assembly.Name.PublicKeyToken).Replace("-", "");
+                                    if (_publicKeyToken.Equals(tokenHexString, StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        hasCorrectPublicKeyToken = true;
+                                    }
                                 }
                             }
                         }
