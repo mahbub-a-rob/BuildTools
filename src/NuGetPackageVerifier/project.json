@@ -12,16 +12,6 @@
     "Mono.Cecil": "0.10.0-beta1-v2"
   },
   "frameworks": {
-    "net451": {
-      "frameworkAssemblies": {
-        "Microsoft.CSharp": "",
-        "System.Collections": "",
-        "System.IO.Compression.FileSystem": "",
-        "System.Net.Http": "",
-        "System.Threading": "",
-        "System.Xml.Linq": ""
-      }
-    },
     "netcoreapp1.1": {
       "dependencies": {
         "Microsoft.NETCore.App": {

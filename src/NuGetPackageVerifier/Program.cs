@@ -82,9 +82,7 @@ namespace NuGetPackageVerifier
                 new AssemblyHasProductAttributeRule(),
                 new AssemblyHasServicingAttributeRule(),
                 new AssemblyHasVersionAttributesRule(),
-                #if NET451
                 new AssemblyStrongNameRule(),
-                #endif
                 new AuthenticodeSigningRule(),
                 new PowerShellScriptIsSignedRule(),
                 new RequiredPackageMetadataRule(),
